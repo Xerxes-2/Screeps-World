@@ -1,4 +1,4 @@
-let roleUpgrader = {
+const roleUpgrader = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
@@ -11,17 +11,13 @@ let roleUpgrader = {
             creep.memory.upgrading = true;
             creep.say('⚡ upgrade');
         }
-
+        creep.moveTo(5 - creep.memory.pos, 11, { visualizePathStyle: { stroke: '#ffaa00' } });
         if (creep.memory.upgrading) {
-            if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(creep.room.controller, { visualizePathStyle: { stroke: '#ffffff' } });
-            }
+            creep.upgradeController(creep.room.controller);
         }
         else {
-            let sources = creep.room.find(FIND_SOURCES);
-            if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
-            }
+            const source = Game.getObjectById('625552b73f39446428c64fb8');
+            creep.withdraw(source, RESOURCE_ENERGY);
         }
     }
 };

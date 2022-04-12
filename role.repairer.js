@@ -1,4 +1,4 @@
-let roleRepairer = {
+const roleRepairer = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
@@ -22,7 +22,7 @@ let roleRepairer = {
                 }
             }
             else {
-                let target = Game.getObjectById('62546f04b3441f30e4b0e9bb');
+                const target = Game.getObjectById('62546f04b3441f30e4b0e9bb');
                 creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
             }
         }

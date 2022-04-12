@@ -1,4 +1,4 @@
-let roleCarrier = {
+const roleCarrier = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
@@ -13,7 +13,7 @@ let roleCarrier = {
         }
 
         if (!creep.memory.refilling) {
-            let source = Game.getObjectById('6255085a71db8742010a87f1');
+            const source = Game.getObjectById('6255085a71db8742010a87f1');
             if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
             }
@@ -24,16 +24,17 @@ let roleCarrier = {
                     return (structure.structureType == STRUCTURE_EXTENSION ||
                         structure.structureType == STRUCTURE_SPAWN || structure.structureType === STRUCTURE_CONTAINER) &&
                         structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0 &&
-                        structure.id !== '6255085a71db8742010a87f1';
+                        structure.id !== '6255085a71db8742010a87f1' &&
+                        structure.id !== '625552b73f39446428c64fb8';
                 }
             });
             if (targets.length > 0) {
-                let target = targets.pop()
+                const target = targets.pop()
                 if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
                 }
             } else {
-                let source = Game.getObjectById('6255085a71db8742010a87f1');
+                const source = Game.getObjectById('6255085a71db8742010a87f1');
                 creep.moveTo(source, { visualizePathStyle: { stroke: '#ffffff' } })
             }
         }
