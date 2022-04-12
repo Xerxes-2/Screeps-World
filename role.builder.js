@@ -13,17 +13,18 @@ let roleBuilder = {
 	    }
 
 	    if(creep.memory.building) {
+	        let closest = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
 	        let targets = creep.room.find(FIND_CONSTRUCTION_SITES);
             if(targets.length) {
-                if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                if(creep.build(closest) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(closest, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }
 	    }
 	    else {
-	        let sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[1], {visualizePathStyle: {stroke: '#ffaa00'}});
+	        let source = Game.getObjectById('62546f04b3441f30e4b0e9bb');
+            if(creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
             }
 	    }
 	}
