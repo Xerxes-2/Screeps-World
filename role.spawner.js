@@ -4,16 +4,24 @@ let spawner = {
         let upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
         let builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
         let repairers = _.filter(Game.creeps, (creep) => creep.memory.role == 'repairer');
+        let carrier = _.filter(Game.creeps, (creep) => creep.memory.role == 'carrier');
         //console.log('Harvesters: ' + harvesters.length);
 
-        if (harvesters.length < 2) {
+        if (harvesters.length < 1) {
             let newName = 'Harvester' + Game.time;
             console.log('Spawning new harvester: ' + newName);
-            Game.spawns['Spawn1'].spawnCreep([WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE], newName,
+            Game.spawns['Spawn1'].spawnCreep([WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE], newName,
                 { memory: { role: 'harvester' } });
         }
 
-        if (builders.length < 1) {
+        if (carrier.length < 2) {
+            let newName = 'Carrier' + Game.time;
+            console.log('Spawning new carrier: ' + newName);
+            Game.spawns['Spawn1'].spawnCreep([WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE], newName,
+                { memory: { role: 'carrier' } });
+        }
+
+        if (builders.length < 2) {
             let newName = 'Builder' + Game.time;
             console.log('Spawning new builder: ' + newName);
             Game.spawns['Spawn1'].spawnCreep([WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE], newName,

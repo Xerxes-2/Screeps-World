@@ -11,16 +11,14 @@ let roleRepairer = {
             creep.memory.repairing = true;
             creep.say('🚧 repair');
         }
-        let targets = creep.room.find(FIND_MY_STRUCTURES, {
-            fliter: (structure) => {
-                return structure.hits < structure.hitsMax;
-            }
-        });
         if (creep.memory.repairing) {
-            if (targets.length) {
-                let target = Game.getObjectById('62546f04b3441f30e4b0e9bb');
-                if (creep.repair(target) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
+            const targets = creep.room.find(FIND_STRUCTURES, {
+                filter: object => object.hits < object.hitsMax
+            });
+            targets.sort((a, b) => a.hits - b.hits);
+            if (targets.length > 0) {
+                if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
                 }
             }
             else {
@@ -29,9 +27,13 @@ let roleRepairer = {
             }
         }
         else {
-            let source = Game.getObjectById('62546f04b3441f30e4b0e9bb');
-            if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
+			let containers = creep.room.find(FIND_STRUCTURES, {
+				filter: structure => structure.structureType === STRUCTURE_CONTAINER &&
+					structure.store[RESOURCE_ENERGY] > 100
+			});
+			containers.sort((a, b) => creep.pos.findPathTo(a).length - creep.pos.findPathTo(b).length)
+            if (creep.withdraw(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(containers[0], { visualizePathStyle: { stroke: '#ffaa00' } });
             }
         }
     }

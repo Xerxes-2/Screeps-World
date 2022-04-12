@@ -3,6 +3,7 @@ let roleUpgrader = require('role.upgrader');
 let roleBuilder = require('role.builder');
 let roleRepairer = require('role.repairer');
 let spawner = require('role.spawner');
+let roleCarrier = require('role.carrier');
 
 module.exports.loop = function () {
 
@@ -24,10 +25,13 @@ module.exports.loop = function () {
             roleUpgrader.run(creep);
         }
         if (creep.memory.role == 'builder') {
-            roleBuilder.run(creep)
+            roleBuilder.run(creep);
         }
         if (creep.memory.role == 'repairer') {
-            roleRepairer.run(creep)
+            roleRepairer.run(creep);
+        }
+        if (creep.memory.role == 'carrier') {
+            roleCarrier.run(creep);
         }
     }
 }
