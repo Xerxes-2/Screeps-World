@@ -3,8 +3,9 @@ const roleHarvester = require('role.harvester');
 const roleUpgrader = require('role.upgrader');
 const roleBuilder = require('role.builder');
 const roleRepairer = require('role.repairer');
-const spawner = require('role.spawner');
+const spawner = require('spawner');
 const roleCarrier = require('role.carrier');
+const tower = require('tower')
 
 module.exports.loop = function () {
 
@@ -16,6 +17,7 @@ module.exports.loop = function () {
     }
 
     spawner.spawn();
+    tower.run();
 
     for (const name in Game.creeps) {
         const creep = Game.creeps[name];

@@ -34,13 +34,18 @@ const spawner = {
 
         if (upgraders.length < 1) {
             const newName = 'Upgrader' + Game.time;
-            const pos = upgraders[0].memory.pos ? 0 : 1;
+            if (upgraders.length == 0) {
+                const pos = 0;
+            }
+            else {
+                const pos = upgraders[0].memory.pos ? 0 : 1;
+            }
             console.log('Spawning new upgrader: ' + newName);
             Game.spawns['Spawn1'].spawnCreep([WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE], newName,
-                { memory: { role: 'upgrader', pos: pos } });
+                { memory: { role: 'upgrader', pos: 0 } });
         }
 
-        if (repairers.length < 1) {
+        if (repairers.length < 0) {
             const newName = 'Repairer' + Game.time;
             console.log('Spawning new repairer: ' + newName);
             Game.spawns['Spawn1'].spawnCreep([WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE], newName,
