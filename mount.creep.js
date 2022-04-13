@@ -20,7 +20,7 @@ const creepExtension = {
         // 代码实现...
     },
     // 填充所有 spawn 和 extension
-    fillSpawnEngry() {
+    fillSpawn() {
         const target = this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
             filter: structure => (structure.structureType == STRUCTURE_SPAWN ||
                 structure.structureType == STRUCTURE_EXTENSION) &&
@@ -60,8 +60,9 @@ const creepExtension = {
         if (this.upgradeController(this.room.controller) === ERR_NOT_IN_RANGE)
             this.moveTo(this.room.controller, { visualizePathStyle: { stroke: '#ffffff' } });
     },
-    pickDropped() {
-        const target = this.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
+    pickDropped(cap) {
+        const target = this.pos.findClosestByPath(FIND_DROPPED_RESOURCES)
+        console.log(target.amount);
         if (target) {
             if (this.pickup(target) == ERR_NOT_IN_RANGE) {
                 this.moveTo(target);
@@ -69,9 +70,9 @@ const creepExtension = {
             return 1;
         } else return 0;
     },
-    drawFrom(id) {
+    drawFrom(id, cap) {
         const target = Game.getObjectById(id);
-        if (target && target.store[RESOURCE_ENERGY] > 400) {
+        if (target && target.store[RESOURCE_ENERGY] > cap) {
             if (this.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 this.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
             }

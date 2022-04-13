@@ -1,25 +1,25 @@
 module.exports = function () {
     Object.assign(Spawn.prototype, spawnExtension)
 }
-const creepConfigs = [
-    {
-        role: 'harvester',
+const creepConfigs = {
+    'harvester': {
         bodys: [WORK, WORK, WORK, WORK, WORK, WORK, WORK, MOVE],
         number: 2
-    }, {
-        role: 'upgrader',
-        bodys: [WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE],
+    },
+    'upgrader': {
+        bodys: [WORK,/* WORK, WORK, WORK, WORK, WORK, CARRY,*/ CARRY, MOVE],
         number: 1
-    }, {
-        role: 'builder',
-        bodys: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+    },
+    'builder': {
+        bodys: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY],
         number: 2
-    }, {
-        role: 'carrier',
-        bodys: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY],
+    },
+    'carrier': {
+        bodys: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY],
         number: 2
     }
-]
+}
+
 const spawnExtension = {
     // 检查任务队列
     work() {
@@ -33,11 +33,11 @@ const spawnExtension = {
                 { align: 'left', opacity: 0.8 });
         }
         if (!this.memory.spawnList) {
-            creepConfigs.forEach(function (role) {
-                const roles = _.filter(Game.creeps, (creep) => creep.memory.role == role.role);
-                if (roles.length < role.number)
-                    this.addTask(role.role);
-            })
+            for (const [key, value] of Object.entries(creepConfigs)) {
+                const roles = _.filter(Game.creeps, (creep) => creep.memory.role == key);
+                if (roles.length < value.number)
+                    this.addTask(key);
+            }
         }
         // 自己已经在生成了 / 内存里没有生成队列 / 生产队列为空 就啥都不干
         if (this.spawning || !this.memory.spawnList || this.memory.spawnList.length == 0) return
@@ -52,15 +52,17 @@ const spawnExtension = {
         if (!this.memory.spawnList) {
             this.memory.spawnList = [];
         }
+        const roles = _.filter(Game.creeps, (creep) => creep.memory.role === taskName);
         // 任务加入队列
-        this.memory.spawnList.push(taskName)
+        if (roles.length < creepConfigs[taskName].number)
+            this.memory.spawnList.push(taskName)
         return this.memory.spawnList.length
 
     },
 
     // creep 生成主要实现
     mainSpawn(taskName) {
-        const body = _.find(creepConfigs, { role: taskName }).bodys;
+        const body = creepConfigs[taskName].bodys;
         const newName = taskName + Game.time;
         let mem;
         switch (taskName) {

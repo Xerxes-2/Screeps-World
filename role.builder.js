@@ -16,14 +16,13 @@ const roleBuilder = {
 			//creep.goUpgrade();
 		}
 		else {
-			let containers = creep.room.find(FIND_STRUCTURES, {
-				filter: structure => structure.structureType === STRUCTURE_CONTAINER &&
-					structure.store[RESOURCE_ENERGY] > 200
-			});
-			containers.sort((a, b) => creep.pos.findPathTo(a).length - creep.pos.findPathTo(b).length)
-			if (creep.withdraw(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-				creep.moveTo(containers[0], { visualizePathStyle: { stroke: '#ffaa00' } });
-			}
+			const cap = creep.store.getCapacity(RESOURCE_ENERGY);
+			const target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+				filter: i => i.structureType === STRUCTURE_CONTAINER &&
+					i.store[RESOURCE_ENERGY] > cap
+			})
+			if (target && target.id != '625552b73f39446428c64fb8' && target.id != '6255085a71db8742010a87f1')
+				creep.drawFrom(target.id, cap);
 		}
 	}
 };
