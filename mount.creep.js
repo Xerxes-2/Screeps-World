@@ -7,13 +7,14 @@ module.exports = function () {
 const creepExtension = {
     // 建设房间内的建筑工地
     buildStructure() {
-        const target = this.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES);
+        const target = this.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
         if (target) {
             if (this.build(target) === ERR_NOT_IN_RANGE) {
                 this.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
             }
-            return 1;
-        } else return 0;
+            return true;
+        } else
+            return false;
     },
     // 自定义敌人检测
     checkEnemy() {
@@ -30,8 +31,8 @@ const creepExtension = {
             if (this.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 this.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
             }
-            return 1;
-        } else return 0;
+            return true;
+        } else return false;
     },
     // 填充所有 tower
     fillTower() {
@@ -43,8 +44,8 @@ const creepExtension = {
             if (this.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 this.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
             }
-            return 1;
-        } else return 0;
+            return true;
+        } else return false;
     },
     // 填充特定container
     fillContainer(id) {
@@ -53,21 +54,23 @@ const creepExtension = {
             if (this.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 this.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
             }
-            return 1;
-        } else return 0;
+            return true;
+        } else return false;
     },
     goUpgrade() {
         if (this.upgradeController(this.room.controller) === ERR_NOT_IN_RANGE)
             this.moveTo(this.room.controller, { visualizePathStyle: { stroke: '#ffffff' } });
     },
     pickDropped(cap) {
-        const target = this.pos.findClosestByPath(FIND_DROPPED_RESOURCES)
-        if (target && target.amount >= cap) {
+        const target = this.pos.findClosestByPath(FIND_DROPPED_RESOURCES, {
+            filter: i => i && i.amount >= cap
+        })
+        if (target) {
             if (this.pickup(target) == ERR_NOT_IN_RANGE) {
                 this.moveTo(target);
             }
-            return 1;
-        } else return 0;
+            return true;
+        } else return false;
     },
     drawFrom(id, cap) {
         const target = Game.getObjectById(id);
@@ -75,7 +78,18 @@ const creepExtension = {
             if (this.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 this.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
             }
-            return 1;
-        } else return 0;
+            return true;
+        } else return false;
+    },
+    goRepair() {
+        const target = this.pos.findClosestByRange(FIND_STRUCTURES, {
+            filter: i => i.hits < i.hitsMax
+        })
+        if (target) {
+            if (this.repair(target) === ERR_NOT_IN_RANGE) {
+                this.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
+            }
+            return true;
+        } else return false;
     }
 }

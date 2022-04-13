@@ -6,11 +6,13 @@ const tower = {
             filter: { structureType: STRUCTURE_TOWER }
         })
         _.forEach(towers, function (tower) {
-            const closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-                filter: (structure) => structure.hits < structure.hitsMax
+            const damagedStructure = tower.room.find(FIND_STRUCTURES, {
+                filter: (structure) => structure.hits < structure.hitsMax &&
+                    structure.hits < 600
             });
-            if (closestDamagedStructure) {
-                tower.repair(closestDamagedStructure);
+            damagedStructure.sort((a, b) => (b.hitsMax - b.hits) - (a.hitsMax - a.hits));
+            if (damagedStructure) {
+                tower.repair(damagedStructure[0]);
             }
             const closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
             if (closestHostile) {

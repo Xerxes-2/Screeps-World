@@ -12,17 +12,13 @@ const roleBuilder = {
 		}
 
 		if (creep.memory.building) {
-			if (!creep.buildStructure());
-			//creep.goUpgrade();
+			if (!creep.buildStructure())
+				if (!creep.goRepair())
+					creep.goUpgrade();
 		}
 		else {
 			const cap = creep.store.getCapacity(RESOURCE_ENERGY);
-			const target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-				filter: i => i.structureType === STRUCTURE_CONTAINER &&
-					i.store[RESOURCE_ENERGY] > cap
-			})
-			if (target && target.id != '625552b73f39446428c64fb8' && target.id != '6255085a71db8742010a87f1')
-				creep.drawFrom(target.id, cap);
+			creep.drawFrom('6256847034ed8cc90c831768', cap);
 		}
 	}
 };

@@ -7,7 +7,7 @@ const creepConfigs = {
         number: 2
     },
     'upgrader': {
-        bodys: [WORK,/* WORK, WORK, WORK, WORK, WORK, CARRY,*/ CARRY, MOVE],
+        bodys: [WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE],
         number: 1
     },
     'builder': {
