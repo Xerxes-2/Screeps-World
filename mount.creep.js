@@ -62,8 +62,7 @@ const creepExtension = {
     },
     pickDropped(cap) {
         const target = this.pos.findClosestByPath(FIND_DROPPED_RESOURCES)
-        console.log(target.amount);
-        if (target) {
+        if (target && target.amount >= cap) {
             if (this.pickup(target) == ERR_NOT_IN_RANGE) {
                 this.moveTo(target);
             }
